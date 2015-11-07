@@ -145,6 +145,10 @@
     <Content Include="Resources\Tents0001.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="compilerconfig.json" />
+    <Content Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\scoutchess415.pubxml" />
     <Content Include="Resources\chessboard.psd" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -160,6 +164,12 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\ScoutChess.js">
+      <DependentUpon>ScoutChess.coffee</DependentUpon>
+    </Content>
+    <Content Include="Scripts\ScoutChess.min.js">
+      <DependentUpon>ScoutChess.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -175,6 +185,7 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Scripts\ScoutChess.coffee" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

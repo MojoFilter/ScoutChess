@@ -28,7 +28,8 @@ namespace ScoutChess
                       "~/Content/site.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/scoutchess").Include(
-                "~/Scripts/crafty.js"));
+                "~/Scripts/crafty.js",
+                "~/Scripts/ScoutChess.js"));
         }
     }
 }
