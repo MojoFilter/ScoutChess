@@ -128,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\chessboard.jpg" />
+    <Content Include="Assets\Pieces.png" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
@@ -142,6 +143,7 @@
     <Content Include="Resources\IMG_20151031_140833.jpg" />
     <Content Include="Resources\IMG_20151104_192715.jpg" />
     <Content Include="Resources\IMG_20151104_194005.jpg" />
+    <Content Include="Resources\rank_bobcat.png" />
     <Content Include="Resources\Tents0001.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -151,6 +153,8 @@
     </Content>
     <None Include="Properties\PublishProfiles\scoutchess415.pubxml" />
     <Content Include="Resources\chessboard.psd" />
+    <Content Include="Resources\badge_composition.psd" />
+    <Content Include="Resources\Pieces.psd" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\crafty.min.js" />
     <Content Include="Scripts\crafty.js" />
