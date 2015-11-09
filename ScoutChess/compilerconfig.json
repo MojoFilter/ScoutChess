@@ -2,5 +2,9 @@
   {
     "outputFile": "Scripts/ScoutChess.js",
     "inputFile": "Scripts/ScoutChess.coffee"
+  },
+  {
+    "outputFile": "Scripts/ScoutChess-Models.js",
+    "inputFile": "Scripts/ScoutChess-Models.coffee"
   }
 ]
