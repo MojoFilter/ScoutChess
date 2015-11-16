@@ -52,7 +52,7 @@ Crafty.scene 'main', ()->
     Crafty.c 'Piece',
         piece: (p) ->
             self = this
-            @requires '2D, DOM, Tween'
+            @requires '2D, DOM, Tween, Mouse'
             @requires "#{p.rank}_#{p.team}"
             
             calcX = (col) -> boardMargin + (coX * p.column())
@@ -61,6 +61,10 @@ Crafty.scene 'main', ()->
             @y = calcY p.row()
             p.column.subscribe (col) -> self.tween {x: calcX col}, pieceMoveDuration
             p.row.subscribe (row) -> self.tween {y: calcY row}, pieceMoveDuration
+            
+            @bind 'Click', (ev) ->
+                if game.turn is p.team
+                    alert "Move that #{p.rank}"
             
     Crafty.e '2D, DOM, Image'
           .image images.board

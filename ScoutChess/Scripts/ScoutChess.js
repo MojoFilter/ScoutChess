@@ -71,7 +71,7 @@
       piece: function(p) {
         var calcX, calcY, self;
         self = this;
-        this.requires('2D, DOM, Tween');
+        this.requires('2D, DOM, Tween, Mouse');
         this.requires("" + p.rank + "_" + p.team);
         calcX = function(col) {
           return boardMargin + (coX * p.column());
@@ -86,10 +86,15 @@
             x: calcX(col)
           }, pieceMoveDuration);
         });
-        return p.row.subscribe(function(row) {
+        p.row.subscribe(function(row) {
           return self.tween({
             y: calcY(row)
           }, pieceMoveDuration);
+        });
+        return this.bind('Click', function(ev) {
+          if (game.turn === p.team) {
+            return alert("Move that " + p.rank);
+          }
         });
       }
     });
