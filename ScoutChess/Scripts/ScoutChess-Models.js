@@ -19,6 +19,40 @@
     var createTeamPieces, piece, _i, _j, _len, _len1, _ref, _ref1;
     this.pieces = [];
     this.turn = player1;
+    this.selectedPiece = ko.observable();
+    this.selectPiece = function(p) {
+      if (p.team === this.turn) {
+        return this.selectedPiece(p);
+      }
+    };
+    this.getMoves = function(p) {
+      var dir, moves;
+      moves = [];
+      switch (p.rank) {
+        case roles.pawn:
+          dir = p.team === player1 ? 1 : -1;
+          moves.push({
+            column: p.column() + dir,
+            row: p.row()
+          });
+          if (p.initiated == null) {
+            moves.push({
+              column: p.column() + dir * 2,
+              row: p.row()
+            });
+          }
+      }
+      return moves;
+    };
+    this.move = function(column, row) {
+      if (this.selectedPiece() != null) {
+        this.selectedPiece().column(column);
+        this.selectedPiece().row(row);
+        this.selectedPiece().initiated = true;
+        this.selectedPiece(null);
+        return this.turn = this.turn === player1 ? player2 : player1;
+      }
+    };
     createTeamPieces = function(team, isRightPlayer) {
       var b, pieces, r, s;
       s = function(fromLeft) {

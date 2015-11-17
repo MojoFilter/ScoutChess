@@ -13,7 +13,32 @@ roles =
 window.ScoutChess = () ->
     @pieces = []
     @turn = player1
+    @selectedPiece = ko.observable()
     
+    @selectPiece = (p) -> @selectedPiece p if p.team is @turn
+    
+    @getMoves = (p) ->
+        moves = []
+        switch p.rank
+            when roles.pawn
+                dir = if p.team is player1 then 1 else -1
+                moves.push
+                    column: p.column() + dir
+                    row: p.row()
+                if not p.initiated?
+                    moves.push
+                        column: p.column() + dir * 2
+                        row: p.row()
+         moves
+         
+    @move = (column, row) ->
+        if @selectedPiece()?
+            @selectedPiece().column column
+            @selectedPiece().row row
+            @selectedPiece().initiated = true
+            @selectedPiece null
+            @turn = if @turn is player1 then player2 else player1
+            
     createTeamPieces = (team, isRightPlayer) ->
         s = (fromLeft) -> if isRightPlayer then 7 - fromLeft else fromLeft
         pieces = (new Piece(team, roles.pawn, s(1), r) for r in [0...8])

@@ -49,22 +49,53 @@ Crafty.scene('loading',
     (e) -> debugger)
     
 Crafty.scene 'main', ()->
+    
+    calcX = (col) -> boardMargin + (coX * col)
+    calcY = (row) -> boardMargin + (coY * row)
+    
+    Crafty.c 'Unit',
+        unit: (column, row) ->
+            @requires '2D'
+            @x = calcX column
+            @y = calcY row
+            @h = 64
+            @w = 64
+            this
+            
     Crafty.c 'Piece',
         piece: (p) ->
             self = this
-            @requires '2D, DOM, Tween, Mouse'
+            @requires '2D, DOM, Tween, Mouse, Unit'
             @requires "#{p.rank}_#{p.team}"
-            
-            calcX = (col) -> boardMargin + (coX * p.column())
-            calcY = (row) -> boardMargin + (coY * p.row())
-            @x = calcX p.column()
-            @y = calcY p.row()
+            @unit p.column(), p.row()
+            @z = 500
             p.column.subscribe (col) -> self.tween {x: calcX col}, pieceMoveDuration
             p.row.subscribe (row) -> self.tween {y: calcY row}, pieceMoveDuration
             
-            @bind 'Click', (ev) ->
-                if game.turn is p.team
-                    alert "Move that #{p.rank}"
+            @bind 'Click', (ev) -> game.selectPiece p
+            this
+            
+    Crafty.c 'Indicator',
+        indicator: (column, row, color) ->
+            @requires '2D, DOM, Color, Unit'
+            @unit column, row
+            @z = 400
+            @color color
+            @alpha = 0.75
+            this
+            
+    Crafty.c 'Active',
+        active: (column, row) ->
+            @requires 'Indicator'
+            @indicator column, row, 'red'
+            this
+            
+    Crafty.c 'Option',
+        option: (column, row) ->
+            @requires 'Indicator, Mouse'
+            @indicator column, row, 'green'
+            @bind 'Click', (ev) -> game.move column, row
+            this
             
     Crafty.e '2D, DOM, Image'
           .image images.board
@@ -73,3 +104,11 @@ Crafty.scene 'main', ()->
     
     game = new ScoutChess()
     Crafty.e('Piece').piece p for p in game.pieces
+    
+    indicators = []
+    game.selectedPiece.subscribe (p) ->
+        i.destroy() for i in indicators
+        indicators = []
+        if p?
+            indicators.push Crafty.e('Active').active p.column(), p.row()
+            indicators.push(Crafty.e('Option').option m.column, m.row) for m in game.getMoves p

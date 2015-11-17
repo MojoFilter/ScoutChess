@@ -66,21 +66,31 @@
   });
 
   Crafty.scene('main', function() {
-    var game, p, _i, _len, _ref, _results;
+    var calcX, calcY, game, indicators, p, _i, _len, _ref;
+    calcX = function(col) {
+      return boardMargin + (coX * col);
+    };
+    calcY = function(row) {
+      return boardMargin + (coY * row);
+    };
+    Crafty.c('Unit', {
+      unit: function(column, row) {
+        this.requires('2D');
+        this.x = calcX(column);
+        this.y = calcY(row);
+        this.h = 64;
+        this.w = 64;
+        return this;
+      }
+    });
     Crafty.c('Piece', {
       piece: function(p) {
-        var calcX, calcY, self;
+        var self;
         self = this;
-        this.requires('2D, DOM, Tween, Mouse');
+        this.requires('2D, DOM, Tween, Mouse, Unit');
         this.requires("" + p.rank + "_" + p.team);
-        calcX = function(col) {
-          return boardMargin + (coX * p.column());
-        };
-        calcY = function(row) {
-          return boardMargin + (coY * p.row());
-        };
-        this.x = calcX(p.column());
-        this.y = calcY(p.row());
+        this.unit(p.column(), p.row());
+        this.z = 500;
         p.column.subscribe(function(col) {
           return self.tween({
             x: calcX(col)
@@ -91,22 +101,65 @@
             y: calcY(row)
           }, pieceMoveDuration);
         });
-        return this.bind('Click', function(ev) {
-          if (game.turn === p.team) {
-            return alert("Move that " + p.rank);
-          }
+        this.bind('Click', function(ev) {
+          return game.selectPiece(p);
         });
+        return this;
+      }
+    });
+    Crafty.c('Indicator', {
+      indicator: function(column, row, color) {
+        this.requires('2D, DOM, Color, Unit');
+        this.unit(column, row);
+        this.z = 400;
+        this.color(color);
+        this.alpha = 0.75;
+        return this;
+      }
+    });
+    Crafty.c('Active', {
+      active: function(column, row) {
+        this.requires('Indicator');
+        this.indicator(column, row, 'red');
+        return this;
+      }
+    });
+    Crafty.c('Option', {
+      option: function(column, row) {
+        this.requires('Indicator, Mouse');
+        this.indicator(column, row, 'green');
+        this.bind('Click', function(ev) {
+          return game.move(column, row);
+        });
+        return this;
       }
     });
     Crafty.e('2D, DOM, Image').image(images.board);
     game = new ScoutChess();
     _ref = game.pieces;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       p = _ref[_i];
-      _results.push(Crafty.e('Piece').piece(p));
+      Crafty.e('Piece').piece(p);
     }
-    return _results;
+    indicators = [];
+    return game.selectedPiece.subscribe(function(p) {
+      var i, m, _j, _k, _len1, _len2, _ref1, _results;
+      for (_j = 0, _len1 = indicators.length; _j < _len1; _j++) {
+        i = indicators[_j];
+        i.destroy();
+      }
+      indicators = [];
+      if (p != null) {
+        indicators.push(Crafty.e('Active').active(p.column(), p.row()));
+        _ref1 = game.getMoves(p);
+        _results = [];
+        for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+          m = _ref1[_k];
+          _results.push(indicators.push(Crafty.e('Option').option(m.column, m.row)));
+        }
+        return _results;
+      }
+    });
   });
 
 }).call(this);
