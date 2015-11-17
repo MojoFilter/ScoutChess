@@ -25,8 +25,13 @@
         return this.selectedPiece(p);
       }
     };
+    this.isOccupied = function(column, row) {
+      return this.pieces.some(function(p) {
+        return p.column() === column && p.row() === row;
+      });
+    };
     this.getMoves = function(p) {
-      var dir, moves;
+      var c, dir, moves, r;
       moves = [];
       switch (p.rank) {
         case roles.pawn:
@@ -40,6 +45,40 @@
               column: p.column() + dir * 2,
               row: p.row()
             });
+          }
+          break;
+        case roles.rook:
+          r = p.row() - 1;
+          while (!(r < 0 || this.isOccupied(p.column(), r))) {
+            moves.push({
+              column: p.column(),
+              row: r
+            });
+            r--;
+          }
+          r = p.row() + 1;
+          while (!(r > 7 || this.isOccupied(p.column(), r))) {
+            moves.push({
+              column: p.column(),
+              row: r
+            });
+            r++;
+          }
+          c = p.column() + 1;
+          while (!(c > 7 || this.isOccupied(c, p.row()))) {
+            moves.push({
+              column: c,
+              row: p.row()
+            });
+            c++;
+          }
+          c = p.column() - 1;
+          while (!(c < 0 || this.isOccupied(c, p.row()))) {
+            moves.push({
+              column: c,
+              row: p.row()
+            });
+            c--;
           }
       }
       return moves;

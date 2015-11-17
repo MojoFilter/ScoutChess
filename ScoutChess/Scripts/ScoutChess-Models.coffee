@@ -17,6 +17,8 @@ window.ScoutChess = () ->
     
     @selectPiece = (p) -> @selectedPiece p if p.team is @turn
     
+    @isOccupied = (column, row) -> @pieces.some (p) -> p.column() is column and p.row() is row
+    
     @getMoves = (p) ->
         moves = []
         switch p.rank
@@ -29,6 +31,35 @@ window.ScoutChess = () ->
                     moves.push
                         column: p.column() + dir * 2
                         row: p.row()
+            when roles.rook
+                #N
+                r = p.row() - 1
+                until r < 0 or @isOccupied p.column(), r
+                    moves.push
+                        column: p.column()
+                        row: r
+                    r--
+                #S
+                r = p.row() + 1
+                until r > 7 or @isOccupied p.column(), r
+                    moves.push
+                        column: p.column()
+                        row: r
+                    r++
+                #E
+                c = p.column() + 1
+                until c > 7 or @isOccupied c, p.row()
+                    moves.push
+                        column: c
+                        row: p.row()
+                    c++
+                #W
+                c = p.column() - 1
+                until c < 0 or @isOccupied c, p.row()
+                    moves.push
+                        column: c
+                        row: p.row()
+                    c--    
          moves
          
     @move = (column, row) ->
