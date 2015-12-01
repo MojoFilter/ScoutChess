@@ -28,6 +28,14 @@
     },
     images: [images.board],
     sprites: {
+      '/Assets/Indicators.png': {
+        tile: 64,
+        tileh: 64,
+        map: {
+          indicator_light: [0, 0],
+          indicator_dark: [1, 0]
+        }
+      },
       '/Assets/Pieces.png': {
         tile: 64,
         tileh: 64,
@@ -109,24 +117,23 @@
     });
     Crafty.c('Indicator', {
       indicator: function(column, row, color) {
-        this.requires('2D, DOM, Color, Unit');
+        this.requires('2D, DOM, Unit');
         this.unit(column, row);
         this.z = 400;
-        this.color(color);
         this.alpha = 0.75;
         return this;
       }
     });
     Crafty.c('Active', {
       active: function(column, row) {
-        this.requires('Indicator');
+        this.requires('Indicator, indicator_dark');
         this.indicator(column, row, 'red');
         return this;
       }
     });
     Crafty.c('Option', {
       option: function(column, row) {
-        this.requires('Indicator, Mouse');
+        this.requires('Indicator, indicator_light, Mouse');
         this.indicator(column, row, 'green');
         this.bind('Click', function(ev) {
           return game.move(column, row);

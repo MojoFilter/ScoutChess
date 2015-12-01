@@ -16,6 +16,13 @@ assets =
         music: [r 'fetty-wap-trap-queen-instrumental.mp3']
     images: [images.board]
     sprites:
+        '/Assets/Indicators.png':
+            tile: 64
+            tileh: 64
+            map:
+                indicator_light: [0,0]
+                indicator_dark:  [1,0]
+                
         '/Assets/Pieces.png':
             tile: 64
             tileh: 64
@@ -77,22 +84,21 @@ Crafty.scene 'main', ()->
             
     Crafty.c 'Indicator',
         indicator: (column, row, color) ->
-            @requires '2D, DOM, Color, Unit'
+            @requires '2D, DOM, Unit'
             @unit column, row
             @z = 400
-            @color color
             @alpha = 0.75
             this
             
     Crafty.c 'Active',
         active: (column, row) ->
-            @requires 'Indicator'
+            @requires 'Indicator, indicator_dark'
             @indicator column, row, 'red'
             this
             
     Crafty.c 'Option',
         option: (column, row) ->
-            @requires 'Indicator, Mouse'
+            @requires 'Indicator, indicator_light, Mouse'
             @indicator column, row, 'green'
             @bind 'Click', (ev) -> game.move column, row
             this

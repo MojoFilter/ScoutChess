@@ -19,6 +19,8 @@ window.ScoutChess = () ->
     
     @isOccupied = (column, row) -> @pieces.some (p) -> p.column() is column and p.row() is row
     
+    onBoard = (column, row) -> column >= 0 and column < 8 and row >= 0 and row < 8
+    
     @getMoves = (p) ->
         moves = []
         switch p.rank
@@ -60,6 +62,31 @@ window.ScoutChess = () ->
                         column: c
                         row: p.row()
                     c--    
+            when roles.knight
+                ks = [[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1],[-2,-1],[-2,1]]
+                for dir in ks
+                    c = dir[0] + p.column()
+                    r = dir[1] + p.row()
+                    if onBoard(c, r) and not @isOccupied c, r
+                        moves.push
+                            column: c
+                            row: r
+            when roles.bishop
+                self = this
+                bish = (cd, rd) ->                   
+                    c = p.column() + cd
+                    r = p.row() + rd
+                    until not onBoard(c, r) or self.isOccupied(c, r)
+                        moves.push
+                            column: c
+                            row: r
+                        c += cd
+                        r += rd
+                bish -1, -1
+                bish -1, 1
+                bish 1, -1
+                bish 1, 1
+                
          moves
          
     @move = (column, row) ->

@@ -129,6 +129,7 @@
   <ItemGroup>
     <Content Include="Assets\chessboard.jpg" />
     <Content Include="Assets\fetty-wap-trap-queen-instrumental.mp3" />
+    <Content Include="Assets\Indicators.png" />
     <Content Include="Assets\Pieces.png" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -156,6 +157,8 @@
     <Content Include="Resources\chessboard.psd" />
     <Content Include="Resources\badge_composition.psd" />
     <Content Include="Resources\Pieces.psd" />
+    <Content Include="Resources\GreenTent.psd" />
+    <Content Include="Resources\Indicators.psd" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\crafty.min.js" />
     <Content Include="Scripts\crafty.js" />

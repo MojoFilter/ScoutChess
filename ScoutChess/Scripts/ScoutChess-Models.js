@@ -16,7 +16,7 @@
   };
 
   window.ScoutChess = function() {
-    var createTeamPieces, piece, _i, _j, _len, _len1, _ref, _ref1;
+    var createTeamPieces, onBoard, piece, _i, _j, _len, _len1, _ref, _ref1;
     this.pieces = [];
     this.turn = player1;
     this.selectedPiece = ko.observable();
@@ -30,8 +30,11 @@
         return p.column() === column && p.row() === row;
       });
     };
+    onBoard = function(column, row) {
+      return column >= 0 && column < 8 && row >= 0 && row < 8;
+    };
     this.getMoves = function(p) {
-      var c, dir, moves, r;
+      var bish, c, dir, ks, moves, r, self, _i, _len;
       moves = [];
       switch (p.rank) {
         case roles.pawn:
@@ -80,6 +83,42 @@
             });
             c--;
           }
+          break;
+        case roles.knight:
+          ks = [[-1, -2], [-1, 2], [1, -2], [1, 2], [2, -1], [2, 1], [-2, -1], [-2, 1]];
+          for (_i = 0, _len = ks.length; _i < _len; _i++) {
+            dir = ks[_i];
+            c = dir[0] + p.column();
+            r = dir[1] + p.row();
+            if (onBoard(c, r) && !this.isOccupied(c, r)) {
+              moves.push({
+                column: c,
+                row: r
+              });
+            }
+          }
+          break;
+        case roles.bishop:
+          self = this;
+          bish = function(cd, rd) {
+            var _results;
+            c = p.column() + cd;
+            r = p.row() + rd;
+            _results = [];
+            while (!(!onBoard(c, r) || self.isOccupied(c, r))) {
+              moves.push({
+                column: c,
+                row: r
+              });
+              c += cd;
+              _results.push(r += rd);
+            }
+            return _results;
+          };
+          bish(-1, -1);
+          bish(-1, 1);
+          bish(1, -1);
+          bish(1, 1);
       }
       return moves;
     };
